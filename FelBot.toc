@@ -1,0 +1,16 @@
+## Interface: 16001
+## Title: FelBot |cff80ff40v0.5.10|r
+## IconTexture: Interface\Icons\Spell_Shadow_RagingScream
+## Notes: Warlock buff indicators and click casting on Blizzard unit frames.
+## Author: Zivany Dots
+## Version: 0.5.10
+## SavedVariables: FelBotDB
+Core.lua
+Items.lua
+ItemBuffs.lua
+Preview.lua
+Settings.lua
+WindowTools.lua
+OptionsPanel.lua
+Options.lua
+Bindings.xml

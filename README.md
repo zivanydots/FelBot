@@ -1,6 +1,6 @@
 ![FelBot green graffiti logo](Artwork/FelBot-wordmark.png)
 
-# FelBot — Warlock Buffs
+# FelBot - Warlock Buffs
 
 **By Zivany Dots · Guide for version 0.5.10 · WoW Forever**
 
@@ -10,7 +10,7 @@ It supports the player frame, standard party frames, raid-style party frames and
 
 **FelBot does not cast automatically.** Every spell or item use requires a click or key press. It is built around Blizzard unit frames; replacement frames supplied by other UI addons are not currently supported.
 
-<!-- Add an in-game overview screenshot here. -->
+![FelBot buff and stone icons alongside the player frame](Artwork/FelBot%200.5.10%20Screenshots/Zivany%20Dots%20Player%20Frame.png)
 
 ## Getting started
 
@@ -34,6 +34,8 @@ Choose which regular buffs FelBot should track:
 
 **Self armor preference** can be Automatic, Demon Armor, or Demon Skin. Automatic prefers Demon Armor when learned, otherwise Demon Skin. Only one armor reminder is shown at a time. Stone options are on the Stones tab.
 
+![Buffs tab with spell options, frame modifiers and combat settings](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Buffs.png)
+
 ### Frame modifiers and keyboard binding
 
 The **Frame buff modifier** defaults to **Shift**. Hold it and click a unit frame to apply the next eligible action for that unit. You can choose Shift, Ctrl, Alt, or disable this shortcut.
@@ -41,6 +43,8 @@ The **Frame buff modifier** defaults to **Shift**. Hold it and click a unit fram
 The **Soulstone frame modifier** defaults to **Ctrl**. A different modifier lets you create or use Soulstone directly, bypassing the regular buff queue. If both modifiers are the same, self Soulstone follows Buff Order Queue; party frames apply their missing regular buffs before Soulstone.
 
 Assign **Activate FelBot (Buff Order Queue)** in the game's **Keybindings → FelBot** section for a keyboard shortcut to the self queue.
+
+![FelBot keyboard binding in the game keybindings menu](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Keybindings.png)
 
 ### Buff Order Queue
 
@@ -59,6 +63,8 @@ The default order is:
 
 Each stone's creation and use share one queue position. Pots / Items appears in the editor when enabled custom items are configured; individual items also have their own order. This editor changes the **self** queue, not the order of normal buffs on other players.
 
+![Buff Order Queue editor with up and down arrow controls](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Buff%20Queue%20Order.png)
+
 ### Casting in combat
 
 **Allow casting in combat** enables direct clicks on the prepared spell/item icons. **Combat opacity** controls how faded those icons appear during combat.
@@ -66,8 +72,6 @@ Each stone's creation and use share one queue position. Pots / Items appears in 
 **Combat limitations:** Blizzard restrictions prevent FelBot from rebuilding its protected icon list or changing assigned actions during combat. Treat the icons as the actions prepared before combat: ordinary missing-buff icons may remain after casting, and newly missing buffs may not appear until combat ends. Clicking an icon still requires a valid target, range, resources, an available item, and any applicable cooldown.
 
 The **keyboard queue and frame-modifier shortcuts are disabled in combat**. The Healthstone reminder can still become visible as health drops, but it cannot change the shortcut queue during combat. Use its icon directly, with Allow casting in combat enabled and a Healthstone ready in your bags.
-
-<!-- Add a Buffs tab screenshot here. -->
 
 ## Stones
 
@@ -98,7 +102,11 @@ Enable **Separate Healthstone layout** to make the reminder larger or place it i
 
 **For combat use, carry a Healthstone beforehand and enable Allow casting in combat on Buffs.** Click the reminder itself when it appears. Its changing visibility does not enable the keyboard or frame-modifier queue during combat.
 
-<!-- Add a Stones tab screenshot here. -->
+![Stones tab with keep-in-bag options and Healthstone reminder settings](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Stones.png)
+
+**Test UI example:** a larger, separately positioned Healthstone reminder above the main self frame.
+
+![Self-frame Test UI with the separate Healthstone reminder above the player frame](Artwork/FelBot%200.5.10%20Screenshots/Self%20Frame%20Preview.png)
 
 ## Pots / Items
 
@@ -120,6 +128,8 @@ Icons show stack counts. A missing item stays visible with faded artwork and a *
 
 Party is an explicit opt-in because FelBot cannot reliably determine whether every bag item can target others. Leave it off for self-only potions and items. Opted-in group icons target that frame's player; party modifier clicks reach queued items after missing regular buffs and any shared-modifier Soulstone action.
 
+![Pots / Items tab showing scrolls with Queue and Party options](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Pots%20Items.png)
+
 ### Hiding items while their buff is active
 
 The **Buff** button offers:
@@ -130,7 +140,7 @@ The **Buff** button offers:
 
 An icon returns when its tracked buff expires or is removed. Instant healing/mana potions generally have no lasting buff to hide against. Combat icon lists refresh after combat, so a successful use does not necessarily remove an icon immediately while fighting.
 
-<!-- Add a Pots / Items tab screenshot here. -->
+![Item buff tracking editor with automatic and selected-buff detection options](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Pots%20Items%20Buff%20Tracking.png)
 
 ## Targets
 
@@ -144,7 +154,7 @@ An icon returns when its tracked buff expires or is removed. Instant healing/man
 
 This selects who is eligible for a reminder; it does not automatically cast Soulstone. Party/raid item permissions remain per-item on Pots / Items.
 
-<!-- Add a Targets tab screenshot here. -->
+![Targets tab with separate buff and Soulstone target filters](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Targets.png)
 
 ## Frame Placement
 
@@ -163,7 +173,11 @@ The **Separate Healthstone** section chooses Above or Right of the main self fra
 
 Use Test UI to see the placement while editing. When solo, sample frames let you preview standard party, raid-style party and raid layouts. Scroll within the tab to reach the lower sections.
 
-<!-- Add a Frame Placement tab screenshot here. -->
+![Frame Placement tab with separate settings for each frame category](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Frame%20Placement.png)
+
+**Test UI examples:** standard party, raid-style party and raid frames.
+
+![Test UI sample party and raid frames with mock buff icons](Artwork/FelBot%200.5.10%20Screenshots/Party%20Frames%20Preview.png)
 
 ## Icon Placement
 
@@ -175,7 +189,7 @@ Out-of-range icons fade to **50% opacity**, with combat fading applied on top. U
 
 Test UI uses the current layout settings and mock icons that cannot be clicked or modifier-clicked. Adjust the sliders, switch Test UI off, and **Save** when happy. Test mode automatically stops when the settings window closes or combat begins.
 
-<!-- Add an Icon Placement tab screenshot here. -->
+![Icon Placement tab with size and offset sliders grouped by frame category](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Icon%20Placement.png)
 
 ## Licence
 

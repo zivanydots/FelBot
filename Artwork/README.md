@@ -15,4 +15,4 @@ The custom artwork is covered by the project's MIT licence. Blizzard spell and i
 
 ## 0.5.15 screenshots
 
-The current README uses the supplied images in `FelBiot 0.5.15 Screenshots` (the supplied folder name is preserved). The Buffs image shows 0.5.15. The other eleven images reuse the earlier 0.5.10 captures; the guide notes this so older layouts are not presented as new screenshots.
+The current README uses the eleven supplied images in `FelBiot 0.5.15 Screenshots` (the supplied folder name is preserved). They show the updated 0.5.15 settings and in-game frame examples. Keyboard bindings are illustrated in the Buffs screenshot.

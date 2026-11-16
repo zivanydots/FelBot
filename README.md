@@ -23,8 +23,6 @@ It supports the player frame, standard party frames, raid-style party frames and
 
 See the [full changelog](CHANGELOG.md) for details.
 
-**Screenshot note:** the Buffs screenshot shows 0.5.15. The other supplied images currently illustrate the earlier 0.5.10 interface and may differ from the current arrangement; the text describes 0.5.15.
-
 ## Installation
 
 Download **FelBot-0.5.15.zip** from the [0.5.15 release](https://github.com/zivanydots/FelBot/releases/tag/v0.5.15). Close WoW, then extract the **FelBot** folder into your Forever client's **Interface/AddOns** directory, replacing the existing addon folder. Restart WoW after updating so the new addon-list icon loads. Your saved settings remain in the game's WTF folder.
@@ -60,8 +58,6 @@ The **Frame buff modifier** defaults to **Shift**. Hold it and click a unit fram
 The **Soulstone frame modifier** defaults to **Ctrl**. A different modifier lets you create or use Soulstone directly, bypassing the regular buff queue. If both modifiers are the same, self Soulstone follows Buff Order Queue; party frames apply their missing regular buffs before Soulstone.
 
 The **Keyboard shortcut** section shows your current self-queue bindings. Each key press applies the next eligible action in the order defined by Buff Order Queue. Click **Set binding**, then press a key with optional Shift, Ctrl or Alt; Escape cancels. This replaces the primary key and keeps alternate keys. **Clear bindings** removes all FelBot keys. Changes apply only when you click **Save**, using your active game binding profile; discarding settings leaves the game bindings unchanged. Keys assigned to another action are rejected. You can also use **Keybindings → FelBot → Activate FelBot (Buff Order Queue)** in the game settings. Binding edits and queue shortcuts remain out of combat.
-
-![FelBot keyboard binding in the game keybindings menu](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Keybindings.png)
 
 ### Buff Order Queue
 

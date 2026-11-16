@@ -1,5 +1,6 @@
 local _, F = ...
 local points = {left={"BOTTOMLEFT","TOPLEFT"}, center={"BOTTOM","TOP"}, right={"BOTTOMRIGHT","TOPRIGHT"}}
+local overlayPoints = {left="LEFT",center="CENTER",right="RIGHT"}
 function F:FrameLayout(frame,kind)
     local db=self.db
     if frame==PlayerFrame then
@@ -42,7 +43,8 @@ function F:LayoutIndicators(row, frame, isSelf, buttons, kind)
         local point=points[config.align] or points.right
         row:SetPoint(point[1],frame,point[2],offset,config.gap+verticalShift)
     elseif placement=="overlay" then
-        row:SetPoint("CENTER",frame,"CENTER",offset,verticalShift)
+        local point=overlayPoints[config.align] or "RIGHT"
+        row:SetPoint(point,frame,point,offset,verticalShift)
     else
         row:SetPoint("LEFT",frame,"RIGHT",offset,verticalShift)
     end
@@ -129,7 +131,7 @@ function F:RefreshTestUI()
             end
             if self.db.buffTargets.self then
                 if frame==PlayerFrame and self.db.buffs.health then icon("health", nil, false, true) end
-                if self.db.buffs.weapon and self.db.weaponStone ~= "off" then
+                if self.db.buffs.weapon and (self.db.weaponStone=="fire" or self.db.weaponStone=="spell") then
                     icon(self.db.weaponStone)
                 end
             end

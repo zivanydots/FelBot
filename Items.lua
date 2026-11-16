@@ -1,11 +1,10 @@
 local _, F = ...
-F.maxItems = 6
 function F:NormalizeItems(items)
     local result,seen={},{}
     for _,entry in ipairs(type(items)=="table" and items or {}) do
         local raw=type(entry)=="table" and entry.id
         local id=(type(raw)=="number" or type(raw)=="string") and tonumber(raw)
-        if id and id>0 and id<=2147483647 and id==math.floor(id) and not seen[id] and #result<self.maxItems then
+        if id and id>0 and id<=2147483647 and id==math.floor(id) and not seen[id] then
             local mode=(entry.buffMode=="spell" or entry.buffMode=="off") and entry.buffMode or "auto"
             local buffID=tonumber(type(entry.buffSpellID)=="number" and entry.buffSpellID or "")
             if buffID and (buffID<=0 or buffID>2147483647 or buffID~=math.floor(buffID)) then buffID=nil end
@@ -71,7 +70,6 @@ function F:AddCustomItem(input)
         for _,stoneID in ipairs(stone.items) do if stoneID==id then return false,"Configure warlock stones on the Stones tab." end end
     end
     for _,entry in ipairs(self.db.items) do if entry.id==id then return false,"That item is already in your list." end end
-    if #self.db.items>=self.maxItems then return false,"You can configure up to six items." end
     self.db.items[#self.db.items+1]={id=id,enabled=true,queue=true,party=false,buffMode="auto"}
     self.db.selfPriority=self:NormalizeSelfPriority(self.db.selfPriority)
     self:Refresh()
@@ -101,19 +99,18 @@ function F:UpdateCustomItemVisual(button)
 end
 function F:CreateItemsPage(panel,page)
     local function text(value,x,y,width)
-        local label=page:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall")
-        label:SetPoint("TOPLEFT",x,y); label:SetWidth(width or 680); label:SetJustifyH("LEFT"); label:SetText(value)
-        return label
+        return F:AddOptionsText(page,value,x,y,width or 680)
     end
+    F:AddOptionsHeading(page,"Custom bag items",0,0,690)
     local master=CreateFrame("CheckButton","FelBotItemsEnabled",page,"UICheckButtonTemplate")
-    master:SetPoint("TOPLEFT",0,0); master.text:SetText("Show Pots / Items")
+    master:SetPoint("TOPLEFT",0,-25); master.text:SetText("Show Pots / Items")
     master:SetScript("OnClick",function()
         if not InCombatLockdown() then F.db.itemsEnabled=master:GetChecked(); F:Refresh() end
     end)
-    text("Drop a bag-use item here, or paste its item link / ID. Equipment is not supported. Up to six items.",0,-40)
+    text("Drop a bag-use item here, or paste its item link / ID. Equipment is not supported.",0,-65)
     local input=CreateFrame("EditBox","FelBotItemInput",page,"InputBoxTemplate")
-    input:SetPoint("TOPLEFT",8,-72); input:SetSize(495,24); input:SetAutoFocus(false)
-    local message=text("",0,-108); message:SetTextColor(1,.4,.3)
+    input:SetPoint("TOPLEFT",8,-97); input:SetSize(495,24); input:SetAutoFocus(false)
+    local message=text("",0,-133); message:SetTextColor(1,.4,.3)
     local function add(value)
         local ok,reason=F:AddCustomItem(value)
         message:SetText(reason or "")
@@ -129,14 +126,15 @@ function F:CreateItemsPage(panel,page)
     input:SetScript("OnEnterPressed",function() add(input:GetText()) end)
     input:SetScript("OnEscapePressed",function() input:ClearFocus() end)
     local addButton=CreateFrame("Button","FelBotAddItem",page,"UIPanelButtonTemplate")
-    addButton:SetPoint("TOPLEFT",530,-72); addButton:SetSize(150,24); addButton:SetText("Add item")
+    addButton:SetPoint("TOPLEFT",530,-97); addButton:SetSize(150,24); addButton:SetText("Add item")
     addButton:SetScript("OnClick",function() add(input:GetText()) end)
-    text("Item",38,-133,210); text("Status",260,-133,82); text("Queue",350,-133,45); text("Party",395,-133,45)
-    local empty=text("Add your first item to build a quick-use list.",38,-190,600)
+    F:AddOptionsHeading(page,"Item queue",0,-160,690)
+    text("Item",38,-190,210); text("Status",260,-190,82); text("Queue",350,-190,45); text("Party",395,-190,45)
+    local empty=text("Add your first item to build a quick-use list.",38,-245,600)
     local rows={}
-    for i=1,self.maxItems do
-        local index=i
-        local row=CreateFrame("Frame",nil,page); row:SetPoint("TOPLEFT",0,-150-(i-1)*36); row:SetSize(690,34)
+    local function createRow(index)
+        local i=index
+        local row=CreateFrame("Frame",nil,page); row:SetPoint("TOPLEFT",0,-215-(i-1)*36); row:SetSize(690,34)
         row.enabled=CreateFrame("CheckButton",nil,row,"UICheckButtonTemplate"); row.enabled:SetPoint("LEFT",0,0)
         row:EnableMouse(true)
         row:SetScript("OnEnter",function()
@@ -193,8 +191,12 @@ function F:CreateItemsPage(panel,page)
         row.remove:SetScript("OnClick",function() F:RemoveCustomItem(index) end)
         rows[i]=row
     end
-    text("Party is opt-in for targetable items. Queue has no health threshold; uncheck for icon-only use. Active buffs hide the target's icon; use Buff to adjust detection. Missing items show a red slash.",0,-372,690)
+    local footer=text("Party is opt-in for targetable items. Queue has no health threshold; uncheck for icon-only use. Active buffs hide the target's icon; use Buff to adjust detection. Missing items show a red slash.",0,-430,690)
     function panel:UpdateItemRows()
+        for index=#rows+1,#F.db.items do createRow(index) end
+        local height=math.max(510,215+#F.db.items*36+85)
+        F:SizeOptionsContent(page,height)
+        footer:ClearAllPoints(); footer:SetPoint("TOPLEFT",0,-math.max(430,215+#F.db.items*36+10))
         master:SetChecked(F.db.itemsEnabled); master:SetEnabled(not InCombatLockdown()); addButton:SetEnabled(not InCombatLockdown())
         empty:SetShown(#F.db.items==0)
         for index,row in ipairs(rows) do

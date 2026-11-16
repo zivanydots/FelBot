@@ -2,7 +2,7 @@
 
 # FelBot - Warlock Buffs
 
-**By Zivany Dots · Guide for version 0.5.10 · WoW Forever**
+**By Zivany Dots · Guide for version 0.5.15 · WoW Forever**
 
 FelBot puts missing-buff reminders and clickable spell and item icons alongside your Blizzard unit frames. Keep your Warlock buffs active, manage your stones, choose Soulstone targets, and build a quick-use list of potions and other bag items.
 
@@ -10,11 +10,28 @@ It supports the player frame, standard party frames, raid-style party frames and
 
 **FelBot does not cast automatically.** Every spell or item use requires a click or key press. It is built around Blizzard unit frames; replacement frames supplied by other UI addons are not currently supported.
 
-![FelBot buff and stone icons alongside the player frame](Artwork/FelBot%200.5.10%20Screenshots/Zivany%20Dots%20Player%20Frame.png)
+![FelBot buff and stone icons alongside the player frame](Artwork/FelBiot%200.5.15%20Screenshots/Zivany%20Dots%20Player%20Frame.png)
+
+## What's new in 0.5.15
+
+- A new FB icon in the addon list, with a matching square logo for CurseForge.
+- Clearer settings groups, compact placement controls and left/centre/right raid-overlay alignment.
+- Set or clear the self-queue keyboard binding directly on Buffs, with changes applied on Save.
+- Armor and weapon-stone dropdowns follow their reminder checkboxes. Weapon-stone use defaults off for new/reset settings.
+- Pots / Items has no fixed item-count cap; the editor and icon pool grow with your list.
+- Improved thin underlines, text margins and window scaling. Existing settings are preserved where applicable.
+
+See the [full changelog](CHANGELOG.md) for details.
+
+**Screenshot note:** the Buffs screenshot shows 0.5.15. The other supplied images currently illustrate the earlier 0.5.10 interface and may differ from the current arrangement; the text describes 0.5.15.
+
+## Installation
+
+Download **FelBot-0.5.15.zip** from the [0.5.15 release](https://github.com/zivanydots/FelBot/releases/tag/v0.5.15). Close WoW, then extract the **FelBot** folder into your Forever client's **Interface/AddOns** directory, replacing the existing addon folder. Restart WoW after updating so the new addon-list icon loads. Your saved settings remain in the game's WTF folder.
 
 ## Getting started
 
-Type **`/felbot`** outside combat to open the settings window. Drag the window to move it, or drag its lower-right corner to scale the whole window.
+On a Warlock, type **`/felbot`** outside combat to open the settings window. Other classes receive an access-denied message. Drag the window to move it, or drag its lower-right corner to scale the whole window.
 
 - **Save** keeps your changes. It greys out when there are no unsaved changes.
 - **Default settings** previews the defaults. Click Save to keep them.
@@ -32,9 +49,9 @@ Choose which regular buffs FelBot should track:
 - **Detect Invisibility**
 - **Unending Breath**
 
-**Self armor preference** can be Automatic, Demon Armor, or Demon Skin. Automatic prefers Demon Armor when learned, otherwise Demon Skin. Only one armor reminder is shown at a time. Stone options are on the Stones tab.
+**Armor preference**, beneath the armor checkbox in Buff reminders, can be Automatic, Demon Armor, or Demon Skin. Unchecking the armor reminder disables the dropdown while preserving your selection. Automatic prefers Demon Armor when learned, otherwise Demon Skin. Only one armor reminder is shown at a time. Stone options are on the Stones tab.
 
-![Buffs tab with spell options, frame modifiers and combat settings](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Buffs.png)
+![Buffs tab with spell options, frame modifiers and combat settings](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Buffs.png)
 
 ### Frame modifiers and keyboard binding
 
@@ -42,9 +59,9 @@ The **Frame buff modifier** defaults to **Shift**. Hold it and click a unit fram
 
 The **Soulstone frame modifier** defaults to **Ctrl**. A different modifier lets you create or use Soulstone directly, bypassing the regular buff queue. If both modifiers are the same, self Soulstone follows Buff Order Queue; party frames apply their missing regular buffs before Soulstone.
 
-Assign **Activate FelBot (Buff Order Queue)** in the game's **Keybindings → FelBot** section for a keyboard shortcut to the self queue.
+The **Keyboard shortcut** section shows your current self-queue bindings. Each key press applies the next eligible action in the order defined by Buff Order Queue. Click **Set binding**, then press a key with optional Shift, Ctrl or Alt; Escape cancels. This replaces the primary key and keeps alternate keys. **Clear bindings** removes all FelBot keys. Changes apply only when you click **Save**, using your active game binding profile; discarding settings leaves the game bindings unchanged. Keys assigned to another action are rejected. You can also use **Keybindings → FelBot → Activate FelBot (Buff Order Queue)** in the game settings. Binding edits and queue shortcuts remain out of combat.
 
-![FelBot keyboard binding in the game keybindings menu](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Keybindings.png)
+![FelBot keyboard binding in the game keybindings menu](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Keybindings.png)
 
 ### Buff Order Queue
 
@@ -63,7 +80,7 @@ The default order is:
 
 Each stone's creation and use share one queue position. Pots / Items appears in the editor when enabled custom items are configured; individual items also have their own order. This editor changes the **self** queue, not the order of normal buffs on other players.
 
-![Buff Order Queue editor with up and down arrow controls](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Buff%20Queue%20Order.png)
+![Buff Order Queue editor with up and down arrow controls](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Buff%20Queue%20Order.png)
 
 ### Casting in combat
 
@@ -77,7 +94,7 @@ The **keyboard queue and frame-modifier shortcuts are disabled in combat**. The 
 
 Configure Soulstone, Firestone, Spellstone and Healthstone here. Keeping a spare stone in your bags is separate from enabling its use reminder.
 
-### Keep stones in bags
+### Keep stones in bags reminders
 
 **Enable keep-in-bag creation icons** controls the stock reminders. Choose which stones to keep using the individual **Keep … in bags** checkboxes. Turning the master option off disables those keep controls; it does not disable the separate Use options.
 
@@ -88,11 +105,13 @@ Creation icons have a **+** badge and slightly faded artwork. Once the stone is 
 
 Soulstone and Healthstone default to keeping one in bags. Firestone and Spellstone default to keeping no spare.
 
-### Use options
+### Stone reminders
 
 - **Use Soulstone** enables Soulstone reminders for the targets chosen on Targets.
-- **Use Firestone / Spellstone (self)** enables weapon-stone reminders. Select Firestone or Spellstone in **Weapon stone to apply (self)**; Disabled applies neither.
-- **Include stones in self-frame modifier clicks** includes eligible stone actions in the regular self-frame shortcut. This defaults on. Direct icon clicks remain available independently.
+- **Use Firestone / Spellstone (self)** defaults off. Check it to enable **Weapon stone to apply (self)**, then choose Firestone or Spellstone for your spec. Until you choose, no weapon-stone use is recommended. Unchecking disables use and greys out the dropdown while keeping your selection.
+### Frame shortcuts
+
+**Include stones in self-frame modifier clicks** includes eligible stone actions in the regular self-frame shortcut. This defaults on. Direct icon clicks remain available independently.
 
 ### Healthstone reminder
 
@@ -102,17 +121,17 @@ Enable **Separate Healthstone layout** to make the reminder larger or place it i
 
 **For combat use, carry a Healthstone beforehand and enable Allow casting in combat on Buffs.** Click the reminder itself when it appears. Its changing visibility does not enable the keyboard or frame-modifier queue during combat.
 
-![Stones tab with keep-in-bag options and Healthstone reminder settings](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Stones.png)
+![Stones tab with keep-in-bag options and Healthstone reminder settings](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Stones.png)
 
 **Test UI example:** a larger, separately positioned Healthstone reminder above the main self frame.
 
-![Self-frame Test UI with the separate Healthstone reminder above the player frame](Artwork/FelBot%200.5.10%20Screenshots/Self%20Frame%20Preview.png)
+![Self-frame Test UI with the separate Healthstone reminder above the player frame](Artwork/FelBiot%200.5.15%20Screenshots/Self%20Frame%20Preview.png)
 
 ## Pots / Items
 
-Add up to **six items** that can be used directly from your bags: potions, scrolls, and other usable items. Drop a bag item into the input box, or paste its item link or numeric ID and click **Add item**.
+Add items that can be used directly from your bags: potions, scrolls, and other usable items. Drop a bag item into the input box, or paste its item link or numeric ID and click **Add item**.
 
-**Equipment that must be worn to activate is not supported.** Configure Warlock stones on the Stones tab instead.
+**Equipment that must be worn to activate is not supported.** Configure Warlock stones on the Stones tab instead. There is no fixed item-count cap; the editor scrolls and icon rows grow with your list. Large lists use more screen space and UI resources.
 
 | Control | What it does |
 | --- | --- |
@@ -128,7 +147,7 @@ Icons show stack counts. A missing item stays visible with faded artwork and a *
 
 Party is an explicit opt-in because FelBot cannot reliably determine whether every bag item can target others. Leave it off for self-only potions and items. Opted-in group icons target that frame's player; party modifier clicks reach queued items after missing regular buffs and any shared-modifier Soulstone action.
 
-![Pots / Items tab showing scrolls with Queue and Party options](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Pots%20Items.png)
+![Pots / Items tab showing scrolls with Queue and Party options](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Pots%20Items.png)
 
 ### Hiding items while their buff is active
 
@@ -140,7 +159,7 @@ The **Buff** button offers:
 
 An icon returns when its tracked buff expires or is removed. Instant healing/mana potions generally have no lasting buff to hide against. Combat icon lists refresh after combat, so a successful use does not necessarily remove an icon immediately while fighting.
 
-![Item buff tracking editor with automatic and selected-buff detection options](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Pots%20Items%20Buff%20Tracking.png)
+![Item buff tracking editor with automatic and selected-buff detection options](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Pots%20Items%20Buff%20Tracking.png)
 
 ## Targets
 
@@ -154,7 +173,7 @@ An icon returns when its tracked buff expires or is removed. Instant healing/man
 
 This selects who is eligible for a reminder; it does not automatically cast Soulstone. Party/raid item permissions remain per-item on Pots / Items.
 
-![Targets tab with separate buff and Soulstone target filters](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Targets.png)
+![Targets tab with separate buff and Soulstone target filters](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Targets.png)
 
 ## Frame Placement
 
@@ -167,17 +186,17 @@ Choose where each icon row sits relative to its frame. Four independent sections
 | Raid style party frames | Right of frame, Above frame, On frame (overlay) |
 | Raid Frames | Right of frame, Above frame, On frame (overlay) |
 
-**Above frame** supports left, centre or right alignment and a gap above the frame. **On frame (overlay)** places the icons inside a raid-style frame. Your own entry in a raid frame uses the raid layout, independently of the main self frame.
+**Above frame** supports left, centre or right alignment and a gap above the frame. **On frame (overlay)** supports left, centre or right alignment inside a raid-style frame. Alignment controls appear where applicable; the gap slider appears for Above only. Sections collapse when controls are hidden. Your own entry in a raid frame uses the raid layout, independently of the main self frame.
 
 The **Separate Healthstone** section chooses Above or Right of the main self frame, with alignment for Above. Enable Separate Healthstone layout on Stones first.
 
 Use Test UI to see the placement while editing. When solo, sample frames let you preview standard party, raid-style party and raid layouts. Scroll within the tab to reach the lower sections.
 
-![Frame Placement tab with separate settings for each frame category](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Frame%20Placement.png)
+![Frame Placement tab with separate settings for each frame category](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Frame%20Placement.png)
 
 **Test UI examples:** standard party, raid-style party and raid frames.
 
-![Test UI sample party and raid frames with mock buff icons](Artwork/FelBot%200.5.10%20Screenshots/Party%20Frames%20Preview.png)
+![Test UI sample party and raid frames with mock buff icons](Artwork/FelBiot%200.5.15%20Screenshots/Party%20Frames%20Preview.png)
 
 ## Icon Placement
 
@@ -185,12 +204,15 @@ Fine-tune **icon size**, **horizontal position** and **vertical position** separ
 
 The **Separate Healthstone** section has independent size, horizontal and vertical controls for the main self-frame reminder. Enable it on Stones first.
 
-Out-of-range icons fade to **50% opacity**, with combat fading applied on top. Unavailable or cross-zone targets are treated as out of range when the game supplies that information. Fading is a visual cue; a successful action still depends on the game's target and range checks.
+Out-of-range icons fade to **50% opacity**, with combat fading applied on top. For example, 60% combat opacity and 50% range opacity produce 30% overall opacity. Unavailable or cross-zone targets are treated as out of range when the game supplies that information. Fading is a visual cue; a successful action still depends on the game's target and range checks.
 
 Test UI uses the current layout settings and mock icons that cannot be clicked or modifier-clicked. Adjust the sliders, switch Test UI off, and **Save** when happy. Test mode automatically stops when the settings window closes or combat begins.
 
-![Icon Placement tab with size and offset sliders grouped by frame category](Artwork/FelBot%200.5.10%20Screenshots/FelBot%20v0_5_10%20Icon%20Placement.png)
+![Icon Placement tab with size and offset sliders grouped by frame category](Artwork/FelBiot%200.5.15%20Screenshots/FelBot%20v0_5_15%20Icon%20Placement.png)
 
 ## Licence
 
 FelBot's original code, documentation and custom artwork are available under the [MIT licence](LICENSE), copyright © 2026 Zivany Dots. This licence does not grant rights to Blizzard's game artwork, trademarks or other third-party assets. Spell and item icons are supplied by the game client and are not bundled with FelBot.
+
+
+The custom logo and banner artwork were AI-generated. Screenshots show the actual in-game addon.

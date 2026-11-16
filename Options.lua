@@ -1,7 +1,9 @@
 local _, F = ...
 SLASH_FELBOT1 = "/felbot"
 SlashCmdList.FELBOT = function(message)
-    if not F.db then F:Print("FelBot runs on Warlocks only."); return end
+    local _,class=UnitClass("player")
+    if class~="WARLOCK" then F:Print("Access denied. For warlocks only. Use Buff Rag instead."); return end
+    if not F.db then F:Print("FelBot is not ready yet."); return end
     if InCombatLockdown() then F:Print("Settings are available out of combat."); return end
     local args = {}
     for word in message:lower():gmatch("%S+") do args[#args + 1] = word end

@@ -14,7 +14,7 @@ local function equal(a, b)
     return true
 end
 function F:OptionsDirty()
-    return self.editingOptions and not equal(self.db, FelBotDB) or false
+    return self.editingOptions and (not equal(self.db, FelBotDB) or self:BindingDirty()) or false
 end
 function F:UpdateSaveButton()
     if self.options and self.options.save then
@@ -31,13 +31,16 @@ function F:BeginOptions()
 end
 function F:SaveOptions()
     if InCombatLockdown() then return false end
+    if not self:SaveFelBotBinding() then return false end
     if self.editingOptions then FelBotDB = self:CopySettings(self.db) end
+    if self.options.UpdateBindingControl then self.options:UpdateBindingControl() end
     self:UpdateSaveButton()
     return true
 end
 function F:FinishOptions(save)
     if InCombatLockdown() then return end
-    if save then self:SaveOptions() end
+    if save and not self:SaveOptions() then return end
+    self.bindingDraft=nil
     self.editingOptions, self.awaitingOptionsDecision = false, false
     self.db = FelBotDB
     local position = self.db.windowPosition

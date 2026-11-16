@@ -1,6 +1,6 @@
 local _, F = ...
 FelBot = F
-F.version = "0.5.10"
+F.version = "0.5.15"
 F.maxIndicators = 15
 F.defaults = {
     enabled = true, size = 16, spacing = 3, offset = 31, selfOffset = 15,
@@ -8,7 +8,7 @@ F.defaults = {
     selfPriority = { "armor", "sense", "detect", "breath", "soul", "weapon", "health", "items" },
     itemsEnabled = true, items = {}, iconVertical = 0, selfIconVertical = 0,
     soulModifier = "ctrl", windowScale = .85,
-    buffs = { armor = true, sense = true, detect = true, breath = true, soul = true, weapon = true, health = false },
+    buffs = { armor = true, sense = true, detect = true, breath = true, soul = true, weapon = false, health = false },
     healthstoneHealth = 25,
     healthstoneSeparate = false, healthstoneSize = 32, healthstonePlacement = "top",
     healthstoneAlign = "center", healthstoneOffset = 0, healthstoneVertical = 8,
@@ -17,7 +17,7 @@ F.defaults = {
     rolesOnly = true, armorChoice = "auto", combatClicks = false, combatOpacity = 60,
     frameModifier = "shift",
     soulSelf = true, stoneCreation = true, modifierStones = true,
-    createStones = { soul = true, fire = false, spell = false, health = true }, weaponStone = "off",
+    createStones = { soul = true, fire = false, spell = false, health = true }, weaponStone = "choose",
     placement = "right", selfPlacement = "right", topAlign = "right", selfTopAlign = "right",
     raidPlacement = "right", vertical = 3, selfVertical = 3,
     raidPartyPlacement="right", raidPartySize=16, raidPartyOffset=31, raidPartyIconVertical=0, raidPartyTopAlign="right", raidPartyVertical=3,
@@ -281,6 +281,15 @@ function F:NormalizeSelfPriority(order)
 end
 function F:UpgradeSettings(settings)
     local order, soul, regular = settings.selfPriority, settings.soulModifier, settings.frameModifier
+    if type(settings.buffs)~="table" then settings.buffs={} end
+    if settings.weaponStone=="off" then
+        settings.buffs.weapon=false
+        settings.weaponStone="choose"
+    elseif settings.weaponStone=="fire" or settings.weaponStone=="spell" then
+        if settings.buffs.weapon==nil then settings.buffs.weapon=true end
+    else
+        settings.weaponStone="choose"
+    end
     local raidPlacement = settings.raidPlacement or settings.placement or "right"
     for _,prefix in ipairs({"raidParty","raid"}) do
         local legacy={Size="size",Offset="offset",IconVertical="iconVertical",TopAlign="topAlign",Vertical="vertical"}
@@ -305,7 +314,7 @@ function F:SelfActionScore(key, extra)
             local within = group=="items" and (extra.itemIndex or 1)
                 or (group=="health" and not extra.healthstoneReminder and 1)
                 or (group == "weapon" and key ~= self.db.weaponStone and 1 or 0)
-            return index * 10 + within
+            return index + within/(within+1)
         end
     end
     return 900
@@ -367,18 +376,15 @@ function F:UpdateRange()
         end
     end
 end
-function F:Attach(frame, kind)
-    if kind==true then kind="raidParty" end
-    local compact=kind=="raidParty" or kind=="raid"
-    if self.overlays[frame] then
-        if kind then self.overlays[frame].frameKind=kind; self.overlays[frame].compact=compact end
-        return
+function F:IndicatorCapacity(frame)
+    local count=0
+    for _,entry in ipairs(self.db.items) do
+        if frame==PlayerFrame or entry.party then count=count+1 end
     end
-    local indicators = CreateFrame("Frame", nil, frame)
-    indicators:SetPoint("LEFT", frame, "RIGHT", 3, 0)
-    indicators:SetSize(1, 1)
-    indicators.squares = {}
-    for i = 1, self.maxIndicators do
+    return math.max(self.maxIndicators,9+count)
+end
+function F:EnsureIndicators(frame,indicators,needed)
+    for i = #indicators.squares+1, needed do
         local square = CreateFrame("Button", nil, indicators,
             "SecureActionButtonTemplate,SecureHandlerStateTemplate")
         square:SetFrameLevel(frame:GetFrameLevel() + 21)
@@ -451,6 +457,19 @@ function F:Attach(frame, kind)
         self:CreateItemSlash(square)
         indicators.squares[i] = square
     end
+end
+function F:Attach(frame, kind)
+    if kind==true then kind="raidParty" end
+    local compact=kind=="raidParty" or kind=="raid"
+    if self.overlays[frame] then
+        if kind then self.overlays[frame].frameKind=kind; self.overlays[frame].compact=compact end
+        return
+    end
+    local indicators = CreateFrame("Frame", nil, frame)
+    indicators:SetPoint("LEFT", frame, "RIGHT", 3, 0)
+    indicators:SetSize(1, 1)
+    indicators.squares = {}
+    self:EnsureIndicators(frame,indicators,self:IndicatorCapacity(frame))
     -- Modifier layer is out of combat only. Secure state changes clear all
     -- actions during combat so no stale Healthstone bypasses its threshold.
     local click = CreateFrame("Button", nil, frame, "SecureActionButtonTemplate,SecureHandlerStateTemplate")
@@ -522,6 +541,7 @@ function F:Refresh()
             RegisterStateDriver(click, "visibility", driver)
             overlay.driver = driver
         end
+        self:EnsureIndicators(frame,overlay.indicators,self:IndicatorCapacity(frame))
         for _, square in ipairs(overlay.indicators.squares) do
             square:SetAttribute("combat-clicks", self.db.combatClicks and not self.testUI)
             square:SetAttribute("combat-alpha", self.db.combatOpacity / 100)
@@ -710,7 +730,7 @@ function F:Refresh()
                 click:SetAttribute("safe-" .. attribute, click:GetAttribute(attribute))
             end
         end
-        for i = count + 1, self.maxIndicators do overlay.indicators.squares[i]:Hide() end
+        for i = count + 1, #overlay.indicators.squares do overlay.indicators.squares[i]:Hide() end
         self:LayoutIndicators(overlay.indicators, frame, isSelf, displayed, overlay.frameKind)
     end
     self:UpdateRange()

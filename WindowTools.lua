@@ -1,4 +1,98 @@
 local _, F = ...
+local bindingAction="CLICK FelBotActivateButton:LeftButton"
+local function currentKeys()
+    return GetBindingKey and {GetBindingKey(bindingAction)} or {}
+end
+function F:BindingDirty()
+    if not self.bindingDraft then return false end
+    local actual=currentKeys()
+    if #actual~=#self.bindingDraft.keys then return true end
+    for index,key in ipairs(actual) do if key~=self.bindingDraft.keys[index] then return true end end
+    return false
+end
+function F:StageFelBotBinding(key)
+    if InCombatLockdown() or not self.editingOptions then return false,"Edit bindings outside combat." end
+    local action=key and GetBindingAction(key)
+    if action and action~="" and action~=bindingAction then return false,"That key is already bound. Choose another key." end
+    local old=self.bindingDraft and self.bindingDraft.keys or currentKeys()
+    local keys={}
+    if key then
+        keys[1]=key
+        for index=2,#old do if old[index]~=key then keys[#keys+1]=old[index] end end
+    end
+    self.bindingDraft={keys=keys,set=GetCurrentBindingSet()}
+    self:UpdateSaveButton()
+    if self.options.UpdateBindingControl then self.options:UpdateBindingControl() end
+    return true
+end
+function F:SaveFelBotBinding()
+    if not self:BindingDirty() then self.bindingDraft=nil; return true end
+    if InCombatLockdown() then return false end
+    local draft=self.bindingDraft
+    if GetCurrentBindingSet()~=draft.set then self:Print("Binding profile changed. Choose the FelBot key again."); return false end
+    for _,key in ipairs(draft.keys) do
+        local action=GetBindingAction(key)
+        if action and action~="" and action~=bindingAction then self:Print("FelBot key is now assigned to another action. Choose another key."); return false end
+    end
+    local old=currentKeys()
+    local function restore()
+        for _,key in ipairs(currentKeys()) do SetBinding(key) end
+        for _,key in ipairs(old) do SetBindingClick(key,"FelBotActivateButton","LeftButton") end
+        self:Print("Could not save the FelBot binding. Your previous keys were restored.")
+        return false
+    end
+    for _,key in ipairs(old) do if not SetBinding(key) then return restore() end end
+    for _,key in ipairs(draft.keys) do if not SetBindingClick(key,"FelBotActivateButton","LeftButton") then return restore() end end
+    if SaveBindings(draft.set)==false then return restore() end
+    self.bindingDraft=nil
+    return true
+end
+function F:CreateBindingControls(panel,page)
+    panel.keyboardHeading=F:AddOptionsHeading(page,"Keyboard shortcut",0,-350,325)
+    local description=F:AddOptionsText(page,"Using the key will apply buffs one by one in the order defined by Buff Order Queue.",0,-380,325)
+    local label=F:AddOptionsText(page,"",0,-435,325)
+    F:AddOptionsText(page,"Change the primary key here. Alternate keys are kept. Click Save to apply binding changes.",0,-510,325)
+    local status=F:AddOptionsText(page,"",0,-560,325)
+    local capture=CreateFrame("Button","FelBotSetBinding",page,"UIPanelButtonTemplate")
+    capture:SetPoint("TOPLEFT",0,-470); capture:SetSize(145,26); capture:SetText("Set binding")
+    capture:EnableKeyboard(false)
+    local clear=CreateFrame("Button","FelBotClearBinding",page,"UIPanelButtonTemplate")
+    clear:SetPoint("TOPLEFT",160,-470); clear:SetSize(145,26); clear:SetText("Clear bindings")
+    function panel:UpdateBindingControl()
+        local keys=F.bindingDraft and F.bindingDraft.keys or currentKeys()
+        local labels={}
+        for _,key in ipairs(keys) do labels[#labels+1]=GetBindingText and GetBindingText(key) or key end
+        label:SetText("Current: "..(#labels>0 and table.concat(labels," / ") or "Not bound")..(F:BindingDirty() and " (unsaved)" or ""))
+        capture:SetEnabled(not InCombatLockdown()); clear:SetEnabled(not InCombatLockdown() and #keys>0)
+    end
+    function panel:CancelBindingCapture()
+        capture.capturing=false; capture:EnableKeyboard(false); capture:SetText("Set binding"); status:SetText("")
+    end
+    capture:SetScript("OnClick",function()
+        if InCombatLockdown() then return end
+        if capture.capturing then panel:CancelBindingCapture(); return end
+        capture.capturing=true; capture:EnableKeyboard(true); capture:SetPropagateKeyboardInput(false)
+        capture:SetText("Press a key..."); status:SetText("Press a key with optional Shift, Ctrl or Alt. Escape cancels.")
+    end)
+    capture:SetScript("OnKeyDown",function(_,key)
+        if not capture.capturing then return end
+        if InCombatLockdown() or key=="ESCAPE" then panel:CancelBindingCapture(); return end
+        if IsKeyPressIgnoredForBinding(key) then return end
+        local chord=CreateKeyChordStringUsingMetaKeyState(key)
+        local ok,reason=F:StageFelBotBinding(chord)
+        if ok then panel:CancelBindingCapture() else status:SetText(reason) end
+    end)
+    clear:SetScript("OnClick",function() panel:CancelBindingCapture(); F:StageFelBotBinding(nil) end)
+    capture:RegisterEvent("UPDATE_BINDINGS"); capture:RegisterEvent("PLAYER_REGEN_DISABLED")
+    capture:SetScript("OnEvent",function(_,event)
+        if event=="PLAYER_REGEN_DISABLED" then panel:CancelBindingCapture() end
+        panel:UpdateBindingControl(); F:UpdateSaveButton()
+    end)
+    panel.bindingLabel,panel.bindingStatus,panel.bindingCapture=label,status,capture
+    panel.bindingDescription=description
+    panel.syncers[#panel.syncers+1]=function() panel:UpdateBindingControl() end
+    panel:UpdateBindingControl()
+end
 function F:MoveSelfPriority(index, direction)
     if InCombatLockdown() or type(index)~="number" or (direction ~= -1 and direction ~= 1) then return end
     local order = self.db.selfPriority
@@ -76,6 +170,7 @@ function F:ApplyWindowScale(value, anchor)
     local minimum=math.min(.6,maximum)
     value=math.max(minimum,math.min(maximum,math.floor(value*1000+.5)/1000))
     panel:SetScale(value)
+    self:RefreshOptionsUnderlines()
     self.db.windowScale=value
     if anchor then
         local scale=panel:GetEffectiveScale()
